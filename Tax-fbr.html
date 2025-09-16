@@ -1,1 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate Your Tax</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
 
+        header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            color: #2c3e50;
+        }
+
+        .input-section, .results-section {
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+
+        .input-section h2, .results-section h2 {
+            font-size: 1.8em;
+            color: #34495e;
+            margin-top: 0;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .input-group input[type="number"],
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+
+        .results-section {
+            background-color: #e8f5e9;
+            border: 2px solid #4caf50;
+        }
+
+        .results-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 1.1em;
+        }
+        
+        .results-list p {
+            margin: 0;
+            padding: 8px 0;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .results-list .value {
+            text-align: right;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+        
+        .results-list .monthly-value {
+            color: #1b5e20;
+            font-size: 1.3em;
+        }
+
+        .results-list .annual-value {
+            color: #0d47a1;
+            font-size: 1.3em;
+        }
+        
+        .disclaimer {
+            font-size: 0.9em;
+            color: #777;
+            text-align: justify;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Calculate Your Tax</h1>
+            <p>Calculate your tax based on your salary and a tax rate you provide.</p>
+        </header>
+
+        <section class="input-section">
+            <h2>Enter Your Details</h2>
+            <div class="input-group">
+                <label for="monthly-salary">Monthly Gross Salary</label>
+                <input type="number" id="monthly-salary" placeholder="e.g., 100000" oninput="calculateTax()">
+            </div>
+            <div class="input-group">
+                <label for="annual-bonus">Annual Bonus</label>
+                <input type="number" id="annual-bonus" placeholder="e.g., 50000" oninput="calculateTax()" value="0">
+            </div>
+            <div class="input-group">
+                <label for="tax-status">Tax Registration Status</label>
+                <select id="tax-status" onchange="calculateTax()">
+                    <option value="registered">Registered for Tax</option>
+                    <option value="not-registered">Not Registered for Tax</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="tax-rate">Tax Percentage Rate (%)</label>
+                <input type="number" id="tax-rate" placeholder="e.g., 5" oninput="calculateTax()">
+            </div>
+        </section>
+
+        <section class="results-section">
+            <h2>Calculation Summary</h2>
+            <div class="results-list">
+                <p><strong>Annual Gross Salary:</strong></p> <p class="value" id="annual-salary">0</p>
+                <p><strong>Annual Tax Payable:</strong></p> <p class="value annual-value" id="annual-tax">0</p>
+                <p><strong>Monthly Tax Deduction:</strong></p> <p class="value monthly-value" id="monthly-tax">0</p>
+                <p><strong>Net Monthly Salary:</strong></p> <p class="value monthly-value" id="net-monthly-salary">0</p>
+            </div>
+        </section>
+
+        <div class="disclaimer">
+            <p><strong>Disclaimer:</strong> This calculator applies a single, flat tax rate you provide to your annual income. It does not account for progressive tax slabs, specific deductions, or different rates for filers and non-filers. It is a simple tool for quick estimations only. For official tax calculations, please consult a tax professional or official tax authority resources.</p>
+        </div>
+    </div>
+
+    <script>
+        function calculateTax() {
+            const monthlySalary = parseFloat(document.getElementById('monthly-salary').value) || 0;
+            const annualBonus = parseFloat(document.getElementById('annual-bonus').value) || 0;
+            const taxRate = parseFloat(document.getElementById('tax-rate').value) || 0;
+            const taxStatus = document.getElementById('tax-status').value;
+
+            // Calculate annual gross salary
+            const annualGrossSalary = (monthlySalary * 12) + annualBonus;
+            
+            // Calculate annual tax based on the user-defined rate
+            let annualTax = (annualGrossSalary * taxRate) / 100;
+            
+            // Calculate monthly tax and net salary
+            const monthlyTax = annualTax / 12;
+            const netMonthlySalary = monthlySalary - monthlyTax;
+
+            // Display results
+            document.getElementById('annual-salary').textContent = annualGrossSalary.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('annual-tax').textContent = annualTax.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('monthly-tax').textContent = monthlyTax.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('net-monthly-salary').textContent = netMonthlySalary.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+
+        document.addEventListener('DOMContentLoaded', calculateTax);
+    </script>
+</body>
+</html>
