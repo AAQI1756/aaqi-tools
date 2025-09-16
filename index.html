@@ -2052,7 +2052,7 @@ function renderRecentApps() {
     const recentApps = JSON.parse(localStorage.getItem('recentApps') || '[]');
     recentToolsContainer.innerHTML = ''; // Clear previous content
 
-    recentApps.slice(0, 3).forEach(toolId => { // Limit to 3 apps for the recent section
+    recentApps.slice(0, 5).forEach(toolId => { // Limit to 5 apps for the recent section
         const tool = allTools.find(t => t.id === toolId);
         if (tool) {
             const toolHtml = `<a href="${tool.url}" class="tool-icon" data-tool="${tool.id}">
