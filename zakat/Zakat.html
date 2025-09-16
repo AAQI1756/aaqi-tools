@@ -1,0 +1,362 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zakat Calculator - AAQI Soft Tools</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- General Body and Layout Styling --- */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        /* --- Header Section --- */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        header p {
+            color: #7f8c8d;
+            margin-top: 10px;
+            font-size: 1.1em;
+        }
+        
+        /* --- Section Styling --- */
+        section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        section h2 {
+            font-size: 1.5em;
+            color: #34495e;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .input-group input[type="number"],
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1em;
+            transition: border-color 0.3s, transform 0.2s;
+        }
+
+        .input-group input[type="number"]:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #3498db;
+            transform: scale(1.01);
+        }
+
+        /* --- Ayah Section --- */
+        .ayah {
+            background-color: #eaf6ff;
+            color: #2c3e50;
+            padding: 15px;
+            border-left: 5px solid #3498db;
+            margin-bottom: 20px;
+            font-style: italic;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .ayah p {
+            margin: 0;
+            font-size: 1em;
+            line-height: 1.5;
+        }
+
+        /* --- Results Section --- */
+        .results-section {
+            text-align: center;
+            padding: 20px;
+            background-color: #e8f5e9;
+            border: 2px solid #4caf50;
+            border-radius: 10px;
+            animation: slideInUp 0.8s ease-in-out;
+            margin-top: 20px;
+        }
+
+        .results-section h3 {
+            font-size: 1.2em;
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        .results-section p {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #1b5e20;
+            margin: 0;
+        }
+        
+        .results-section.not-eligible {
+            background-color: #ffcdd2;
+            border-color: #c62828;
+            color: #c62828;
+        }
+
+        .results-section.not-eligible h3, .results-section.not-eligible p {
+            color: #c62828;
+        }
+        
+        /* --- Disclaimer and Note Section --- */
+        .disclaimer, .note {
+            font-size: 0.9em;
+            color: #777;
+            text-align: justify;
+            margin-top: 20px;
+        }
+
+        /* --- Animation Keyframes --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Responsive Design (for smaller screens) --- */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            header {
+                padding: 20px 10px;
+                border-radius: 0;
+            }
+            header h1 {
+                font-size: 2em;
+            }
+        }
+
+        /* --- Dark Mode Styles --- */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode header { background-color: #1e1e1e; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); }
+        body.dark-mode header h1 { color: #fff; }
+        body.dark-mode header p { color: #b0b0b0; }
+        body.dark-mode section { background-color: #1e1e1e; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); }
+        body.dark-mode section h2 { color: #fff; border-bottom-color: #333; }
+        body.dark-mode .input-group label { color: #ccc; }
+        body.dark-mode .input-group input[type="number"], body.dark-mode .input-group select { background-color: #333; border-color: #555; color: #e0e0e0; }
+        body.dark-mode .ayah { background-color: #1a2a38; border-color: #2980b9; color: #b0c2d3; }
+        body.dark-mode .results-section { background-color: #0e351b; border-color: #2e7d32; }
+        body.dark-mode .results-section h3, body.dark-mode .results-section p { color: #4caf50; }
+        body.dark-mode .results-section.not-eligible { background-color: #420f13; border-color: #c62828; }
+        body.dark-mode .results-section.not-eligible h3, body.dark-mode .results-section.not-eligible p { color: #ffcdd2; }
+        body.dark-mode .disclaimer, body.dark-mode .note { color: #aaa; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Zakat Calculator</h1>
+            <p>Calculate your Zakat liability for the year.</p>
+        </header>
+
+        <section>
+            <h2>Select Zakat Type</h2>
+            <div class="input-group">
+                <label for="zakat-type">Choose calculation type:</label>
+                <select id="zakat-type" onchange="showZakatType()">
+                    <option value="wealth">Wealth Zakat</option>
+                    <option value="payment">Payment Zakat</option>
+                </select>
+            </div>
+        </section>
+
+        <div id="wealth-zakat-section">
+            <section class="calculator-form">
+                <h2>Your Assets (Zakatable Wealth)</h2>
+                <div class="ayah">
+                    <p>“And establish prayer and give zakah, and whatever good you put forth for yourselves - you will find it with Allah.” - **[Surah Al-Baqarah 2:110]**</p>
+                </div>
+                <div class="input-group">
+                    <label for="net-balance">Net Balance (Cash in hand and bank accounts)</label>
+                    <input type="number" id="net-balance" placeholder="Enter cash amount" oninput="calculateWealthZakat()">
+                </div>
+                <div class="input-group">
+                    <label for="gold-grams">Gold (in grams)</label>
+                    <input type="number" id="gold-grams" placeholder="Enter weight in grams" oninput="calculateWealthZakat()">
+                </div>
+                <div class="input-group">
+                    <label for="silver-grams">Silver (in grams)</label>
+                    <input type="number" id="silver-grams" placeholder="Enter weight in grams" oninput="calculateWealthZakat()">
+                </div>
+                <div class="input-group">
+                    <label for="stocks">Stocks, shares & investments</label>
+                    <input type="number" id="stocks" placeholder="Enter total value" oninput="calculateWealthZakat()">
+                </div>
+                <div class="input-group">
+                    <label for="property">Property held for investment</label>
+                    <input type="number" id="property" placeholder="Enter current market value" oninput="calculateWealthZakat()">
+                </div>
+                <div class="input-group">
+                    <label for="vehicles">Vehicles (if held for trade/business)</label>
+                    <input type="number" id="vehicles" placeholder="Enter total value" oninput="calculateWealthZakat()">
+                </div>
+                <div class="input-group">
+                    <label for="animals">Animals (if held for trade/business)</label>
+                    <input type="number" id="animals" placeholder="Enter total value" oninput="calculateWealthZakat()">
+                </div>
+                <div class="input-group">
+                    <label for="other-assets">Other assets (e.g., business inventory)</label>
+                    <input type="number" id="other-assets" placeholder="Enter total value" oninput="calculateWealthZakat()">
+                </div>
+            </section>
+        </div>
+
+        <div id="payment-zakat-section" style="display: none;">
+            <section class="calculator-form">
+                <h2>Payment Zakat (Zakat al-Fitr)</h2>
+                <div class="ayah">
+                    <p>“And give Zakah to the poor and the needy.” - **[Surah At-Tawbah 9:60]**</p>
+                </div>
+                <div class="input-group">
+                    <label for="payment-amount">Enter amount to calculate 2.5% Zakat</label>
+                    <input type="number" id="payment-amount" placeholder="Enter amount" oninput="calculatePaymentZakat()">
+                </div>
+            </section>
+        </div>
+
+        <section class="results">
+            <h2>Zakat Payable</h2>
+            <div id="results-box" class="results-section">
+                <h3>Total Zakat Due</h3>
+                <p id="zakat-amount">PKR 0.00</p>
+            </div>
+            <div class="disclaimer">
+                <p><strong>Disclaimer:</strong> This calculator is a tool to assist in estimating your Zakat obligation. It is based on a standard calculation of 2.5% of net assets held for one year. For a precise and accurate calculation, it is highly recommended to consult a qualified religious scholar or an Islamic finance expert.</p>
+            </div>
+            <div class="note">
+                <p><strong>Note:</strong> Distribution of Zakat is designated for eight categories, as mentioned in the Quran (Surah At-Tawbah, 9:60):</p>
+                <ul>
+                    <li>The poor (Al-Fuqara)</li>
+                    <li>The needy (Al-Masakin)</li>
+                    <li>Zakat administrators (Al-Amileen)</li>
+                    <li>Those whose hearts are to be reconciled (Al-Mu'allafatu Qulubuhum)</li>
+                    <li>For freeing slaves (Ar-Riqab)</li>
+                    <li>Those in debt (Al-Gharimin)</li>
+                    <li>In the cause of Allah (Fi Sabilillah)</li>
+                    <li>The wayfarer (Ibn As-Sabil)</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const NISAB_SILVER_GRAMS = 612.36; // Constant for Nisab based on silver weight
+        const GOLD_PRICE_PER_GRAM_PKR = 25000;
+        const SILVER_PRICE_PER_GRAM_PKR = 350;
+
+        function showZakatType() {
+            const zakatType = document.getElementById('zakat-type').value;
+            document.getElementById('wealth-zakat-section').style.display = zakatType === 'wealth' ? 'block' : 'none';
+            document.getElementById('payment-zakat-section').style.display = zakatType === 'payment' ? 'block' : 'none';
+            
+            if (zakatType === 'wealth') {
+                calculateWealthZakat();
+            } else {
+                calculatePaymentZakat();
+            }
+        }
+
+        function calculateWealthZakat() {
+            const netBalance = parseFloat(document.getElementById('net-balance').value) || 0;
+            const goldGrams = parseFloat(document.getElementById('gold-grams').value) || 0;
+            const silverGrams = parseFloat(document.getElementById('silver-grams').value) || 0;
+            const stocks = parseFloat(document.getElementById('stocks').value) || 0;
+            const property = parseFloat(document.getElementById('property').value) || 0;
+            const vehicles = parseFloat(document.getElementById('vehicles').value) || 0;
+            const animals = parseFloat(document.getElementById('animals').value) || 0;
+            const otherAssets = parseFloat(document.getElementById('other-assets').value) || 0;
+
+            const nisabValue = NISAB_SILVER_GRAMS * SILVER_PRICE_PER_GRAM_PKR;
+            
+            const totalAssets = netBalance + (goldGrams * GOLD_PRICE_PER_GRAM_PKR) + (silverGrams * SILVER_PRICE_PER_GRAM_PKR) + stocks + property + vehicles + animals + otherAssets;
+            
+            const zakatAmountDisplay = document.getElementById('zakat-amount');
+            const resultsBox = document.getElementById('results-box');
+
+            if (totalAssets >= nisabValue) {
+                const zakatPayable = totalAssets * 0.025;
+                zakatAmountDisplay.textContent = `PKR ${zakatPayable.toFixed(2)}`;
+                resultsBox.classList.remove('not-eligible');
+            } else {
+                zakatAmountDisplay.textContent = `Not Eligible to Pay Zakat`;
+                resultsBox.classList.add('not-eligible');
+            }
+        }
+
+        function calculatePaymentZakat() {
+            const paymentAmount = parseFloat(document.getElementById('payment-amount').value) || 0;
+            const zakatPayable = paymentAmount * 0.025;
+            
+            const zakatAmountDisplay = document.getElementById('zakat-amount');
+            const resultsBox = document.getElementById('results-box');
+            
+            zakatAmountDisplay.textContent = `PKR ${zakatPayable.toFixed(2)}`;
+            resultsBox.classList.remove('not-eligible');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showZakatType();
+        });
+    </script>
+</body>
+</html>
